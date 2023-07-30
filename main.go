@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"restful-api/auth"
 	"restful-api/handler"
 	"restful-api/user"
 
@@ -17,9 +18,13 @@ func main()  {
 		log.Fatal(err.Error())
 	}
 	userRepository := user.NewRepository(db)
+	
 	userService := user.NewService(userRepository)
-	userHandler := handler.NewUserHandler(userService)
+	authService := auth.NewService()
 
+	
+	userHandler := handler.NewUserHandler(userService,authService)
+	
 	router := gin.Default()
 	api := router.Group("/api/v1")
 	api.POST("/users", userHandler.RegisterUser)
