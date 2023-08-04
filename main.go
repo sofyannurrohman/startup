@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"restful-api/auth"
+	"restful-api/campaign"
 	"restful-api/handler"
 	"restful-api/helper"
 	"restful-api/user"
@@ -22,7 +24,26 @@ func main()  {
 		log.Fatal(err.Error())
 	}
 	userRepository := user.NewRepository(db)
-	
+	campaignRepository := campaign.NewRepository(db)
+
+	campaigns,err := campaignRepository.FindByUserID(1)
+
+	fmt.Println("debug")
+
+	fmt.Println("debug")
+
+	fmt.Println("debug")
+
+	fmt.Println(len(campaigns))
+
+	for _, campaign := range campaigns {
+		fmt.Println(campaign.Name)
+		fmt.Println(len(campaign.CampaignImages))
+		if len(campaign.CampaignImages) > 0 {
+			fmt.Println(campaign.CampaignImages[0].FileName)
+		}
+	}
+
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 
