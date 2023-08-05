@@ -25,24 +25,10 @@ func main()  {
 	}
 	userRepository := user.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
+	campaignService := campaign.NewService(campaignRepository)
 
-	campaigns,err := campaignRepository.FindByUserID(1)
-
-	fmt.Println("debug")
-
-	fmt.Println("debug")
-
-	fmt.Println("debug")
-
-	fmt.Println(len(campaigns))
-
-	for _, campaign := range campaigns {
-		fmt.Println(campaign.Name)
-		fmt.Println(len(campaign.CampaignImages))
-		if len(campaign.CampaignImages) > 0 {
-			fmt.Println(campaign.CampaignImages[0].FileName)
-		}
-	}
+	ca,err := campaignService.FindCampaigns(3)
+	fmt.Println(len(ca))
 
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
