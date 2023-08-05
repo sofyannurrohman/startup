@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"restful-api/auth"
@@ -27,14 +26,12 @@ func main()  {
 	campaignRepository := campaign.NewRepository(db)
 	campaignService := campaign.NewService(campaignRepository)
 
-	ca,err := campaignService.FindCampaigns(3)
-	fmt.Println(len(ca))
 
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 
 	userHandler := handler.NewUserHandler(userService,authService)
-	
+	campaignHandler := handler.NewCampaignHandler(campaignService)
 	
 	router := gin.Default()
 	api := router.Group("/api/v1")
@@ -42,6 +39,7 @@ func main()  {
 	api.POST("/sessions", userHandler.LoginUser)
 	api.POST("/email-checkers",userHandler.CheckEmailAvailability)
 	api.POST("/avatars",authMiddleware(authService,userService),userHandler.UploadAvatar)
+	api.GET("/campaigns", campaignHandler.GetCampaigns)
 	router.Run()
 }
 
