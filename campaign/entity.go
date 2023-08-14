@@ -1,6 +1,9 @@
 package campaign
 
-import "time"
+import (
+	"restful-api/user"
+	"time"
+)
 
 type Campaign struct{
 	ID int
@@ -16,6 +19,7 @@ type Campaign struct{
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	CampaignImages []CampaignImages
+	User user.User
 }
 type CampaignImages struct{
 	ID int
