@@ -7,6 +7,7 @@ import (
 	"restful-api/campaign"
 	"restful-api/handler"
 	"restful-api/helper"
+	"restful-api/payment"
 	"restful-api/transaction"
 	"restful-api/user"
 	"strings"
@@ -31,8 +32,10 @@ func main()  {
 	campaignService := campaign.NewService(campaignRepository)
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
-	transactionService := transaction.NewService(transactionRepository,campaignRepository)
+	paymentService:= payment.NewService()
+	transactionService := transaction.NewService(transactionRepository,campaignRepository,paymentService)
 
+	
 	userHandler := handler.NewUserHandler(userService,authService)
 	campaignHandler := handler.NewCampaignHandler(campaignService)
 	transactionHandler := handler.NewTransaction(transactionService)
@@ -51,7 +54,7 @@ func main()  {
 	api.POST("/campaign-images", authMiddleware(authService,userService),campaignHandler.UploadImage)
 	api.GET("/campaigns/:id/transactions",authMiddleware(authService,userService),transactionHandler.GetCampaignTrasaction)
 	api.GET("/transactions",authMiddleware(authService,userService),transactionHandler.GetUserTransaction)
-	
+	api.POST("/transactions",authMiddleware(authService,userService),transactionHandler.CreateTransaction)
 	router.Run()
 }
 
